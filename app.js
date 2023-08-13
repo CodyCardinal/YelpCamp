@@ -7,9 +7,13 @@ const methodOverride = require('method-override')
 const morgan = require('morgan');
 const session = require('express-session');
 const flash = require('connect-flash');
+const passport = require('passport'); // using pbkdf2 algorithm
+const LocalStrategy = require('passport-local');
+const User = require('./models/user');
 
-const campgrounds = require('./routes/campgrounds');
-const reviews = require('./routes/reviews');
+const userRoutes = require('./routes/user');
+const campgroundRoutes = require('./routes/campgrounds');
+const reviewRoutes = require('./routes/reviews');
 
 mongoose.connect('mongodb://localhost:27017/yelp-camp', {
 });
@@ -43,15 +47,25 @@ const sessionConfig = {
 
 app.use(session(sessionConfig))
 app.use(flash());
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate())); 
+// Passport, we would like you to use the local strategy that we required. 
+// Authenticate is a static method added by passport-local.
+passport.serializeUser(User.serializeUser()); // store user in session
+passport.deserializeUser(User.deserializeUser()); // unstore user in session
 
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user; // req.user is defined by passport
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
     next();
 })
 
-app.use('/campgrounds', campgrounds);
-app.use('/campgrounds/:id/reviews', reviews)
+
+app.use('/', userRoutes);
+app.use('/campgrounds', campgroundRoutes);
+app.use('/campgrounds/:id/reviews', reviewRoutes);
 
 app.get('/', (req, res) => {
     res.render('home')
