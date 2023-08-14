@@ -13,7 +13,7 @@ imageSchema.virtual('thumbnail').get(function () {
 
 const CampgroundSchema = new Schema({
     title: String,
-    image: [imageSchema],
+    images: [imageSchema],
     price: Number,
     description: String,
     location: String,
