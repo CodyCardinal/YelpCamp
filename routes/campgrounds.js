@@ -4,12 +4,19 @@ const campgrounds = require("../controllers/campgrounds");
 const errorSync = require("../utils/errorSync");
 const { isLoggedIn, validateCampground, isAuthor } = require("../middleware");
 
-router.get("/", errorSync(campgrounds.index));
+router
+  .route("/")
+  .get(errorSync(campgrounds.index))
+  .post(isLoggedIn, validateCampground, errorSync(campgrounds.createCampground));
+
 router.get("/new", isLoggedIn, campgrounds.renderNewForm);
-router.post("/", isLoggedIn, validateCampground, errorSync(campgrounds.createCampground));
-router.get("/:id", errorSync(campgrounds.showCampground));
+
+router
+  .route("/:id")
+  .get(errorSync(campgrounds.showCampground))
+  .put(isLoggedIn, isAuthor, validateCampground, errorSync(campgrounds.updateCampground))
+  .delete(isLoggedIn, errorSync(campgrounds.deleteCampground));
+
 router.get("/:id/edit", isLoggedIn, isAuthor, errorSync(campgrounds.renderEditForm));
-router.put("/:id/", isLoggedIn, isAuthor, validateCampground, errorSync(campgrounds.updateCampground));
-router.delete("/:id", isLoggedIn, errorSync(campgrounds.deleteCampground));
 
 module.exports = router;
