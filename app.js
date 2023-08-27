@@ -2,6 +2,7 @@ if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
 
+// Heroku Prep
 // Run in production with NODE_ENV=production node app.js
 
 const express = require("express");
