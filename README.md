@@ -12,8 +12,12 @@
 
 **Requirements**
 For local dev: 
-npm 9.8.0, 
-mongoDB 6.0.8
+- npm 9.8.0, 
+- Local mongoDB 6.0.8 or Mongo Atlas Cloud DB
+
+- Cloudinary.com account, key and secret.
+- Mapbox token.
+
 
 From the YelpCamp Directory, run `npm install` to retrieve the following:
 
@@ -40,5 +44,16 @@ From the YelpCamp Directory, run `npm install` to retrieve the following:
 - "sanitize-html": "^2.11.0"
 ```
 
-Stand up YelpCamp locally with `node app.js` or optionally run nodemon locally, and use `nodemon app.js`.
+Create .env file in the local directory with the following:
+
+```bash
+CLOUDINARY_CLOUD_NAME=<name>
+CLOUDINARY_KEY=<key>
+CLOUDINARY_SECRET=<secret>
+MAPBOX_TOKEN=<token>
+DB_URL=<dburl>
+```
+
+Stand up YelpCamp locally with `node app.js` 
+(optional) run nodemon locally, and use `nodemon app.js`.
 
